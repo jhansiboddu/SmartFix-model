@@ -40,10 +40,7 @@ async def predict(file: UploadFile = File(...)):
         logits_per_image, _ = model(image_input, text_tokens)
         probs = logits_per_image.softmax(dim=-1).cpu().numpy()[0]
 
-    prediction = {
-        "class": class_names[int(probs.argmax())],
-        "confidence": round(float(probs.max()) * 100, 2),
-        "all_probs": {class_names[i]: round(float(p) * 100, 2) for i, p in enumerate(probs)}
-    }
+    prediction = class_names[int(probs.argmax())]
 
-    return prediction
+    return {"class": prediction}
+
